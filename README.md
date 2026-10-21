@@ -1,4 +1,4 @@
-*Ce projet a été réalisé dans le cadre du cursus de 42 par isoulima.*
+*This project has been created as part of the 42 curriculum by isoulima.*
 
 # Get Next Line
 
@@ -9,7 +9,7 @@
 
 ## Description
 
-Get Next Line est une fonction qui permet de lire un fichier ligne par ligne à partir d'un descripteur de fichier. Le projet enseigne la gestion de mémoire, l'utilisation de variables statiques pour conserver l'état entre plusieurs appels, ainsi que la lecture bufferisée via `read()`. La fonction est capable de lire aussi bien des fichiers que l'entrée standard, quel que soit le `BUFFER_SIZE`.
+Get Next Line is a function that reads a file line by line from a file descriptor. The project teaches memory management, the use of static variables to keep state between calls, and buffered reading with `read()`. The function can read from files as well as from standard input, whatever the `BUFFER_SIZE`.
 
 ---
 
@@ -21,9 +21,9 @@ Get Next Line est une fonction qui permet de lire un fichier ligne par ligne à 
 cc -Wall -Wextra -Werror -D BUFFER_SIZE=42 get_next_line.c get_next_line_utils.c main.c
 ```
 
-Le `BUFFER_SIZE` est modifiable pour tester différents comportements. Sans le flag `-D`, la valeur par défaut est 42 (définie dans `get_next_line.h`).
+`BUFFER_SIZE` can be changed to test different behaviors. Without the `-D` flag, the default value is 42 (defined in `get_next_line.h`).
 
-### Utilisation
+### Usage
 
 ```c
 #include "get_next_line.h"
@@ -46,55 +46,55 @@ int main(void)
 
 ---
 
-## Fonctionnalités
+## Features
 
-- Lecture ligne par ligne depuis un file descriptor
-- Chaque ligne retournée inclut le `\n` (sauf en fin de fichier sans `\n`)
-- Fonctionne sur fichiers et entrée standard
-- Compatible avec n'importe quel `BUFFER_SIZE` (1, 42, 9999, 10000000...)
-- Retourne `NULL` en fin de fichier ou en cas d'erreur
-
----
-
-## Choix techniques
-
-Le fonctionnement repose sur une logique de **stash** (réserve mémoire persistante via une variable statique) :
-
-1. Au premier appel, le stash est initialisé avec `ft_strdup("")` (chaîne vide)
-2. `read_to_stash` lit dans un buffer avec `read()` et concatène au stash via `stash_join` (qui utilise `ft_strjoin` + libère l'ancien stash)
-3. La boucle de lecture s'arrête dès qu'un `\n` est trouvé dans le stash (via `ft_strchr`) ou que `read()` retourne 0
-4. `stash_line` extrait la ligne : si un `\n` est trouvé, `ft_substr` découpe la ligne et `ft_strdup` conserve le reste ; sinon tout le stash est retourné et le pointeur mis à `NULL`
-5. En cas d'erreur de `read()` ou de `malloc`, `error_free` libère proprement le buffer et le stash
-
-**Structure du code :**
-- `get_next_line.c` : 4 fonctions statiques (`error_free`, `stash_join`, `read_to_stash`, `stash_line`) + la fonction publique `get_next_line`
-- `get_next_line_utils.c` : 5 fonctions utilitaires recodées (`ft_strlen`, `ft_strdup`, `ft_strchr`, `ft_strjoin`, `ft_substr`) car la libft est interdite dans ce projet
-
-Cette approche a été choisie car elle permet de ne lire que le strict nécessaire à chaque appel sans charger le fichier entier en mémoire. La variable statique conserve l'état entre les appels sans recourir à des variables globales (interdites par le sujet).
+- Reads line by line from a file descriptor
+- Each returned line includes the `\n` (except at end of file without a `\n`)
+- Works on files and standard input
+- Compatible with any `BUFFER_SIZE` (1, 42, 9999, 10000000...)
+- Returns `NULL` at end of file or on error
 
 ---
 
-## Ressources
+## Technical choices
+
+The implementation relies on a **stash** (persistent memory reserve kept in a static variable):
+
+1. On the first call, the stash is initialized with `ft_strdup("")` (empty string)
+2. `read_to_stash` reads into a buffer with `read()` and appends it to the stash through `stash_join` (which uses `ft_strjoin` and frees the old stash)
+3. The read loop stops as soon as a `\n` is found in the stash (with `ft_strchr`) or `read()` returns 0
+4. `stash_line` extracts the line: if a `\n` is found, `ft_substr` cuts the line and `ft_strdup` keeps the remainder; otherwise the whole stash is returned and the pointer is set to `NULL`
+5. On a `read()` or `malloc` error, `error_free` cleanly frees the buffer and the stash
+
+**Code structure:**
+- `get_next_line.c`: 4 static functions (`error_free`, `stash_join`, `read_to_stash`, `stash_line`) + the public `get_next_line` function
+- `get_next_line_utils.c`: 5 re-implemented utility functions (`ft_strlen`, `ft_strdup`, `ft_strchr`, `ft_strjoin`, `ft_substr`) since libft is not allowed in this project
+
+This approach was chosen because it only reads what is strictly needed on each call, without loading the whole file into memory. The static variable keeps state between calls without using global variables (forbidden by the subject).
+
+---
+
+## Resources
 
 - `man read`
-- Documentation sur les file descriptors
-- Documentation sur les variables statiques en C
-- Gestion mémoire dynamique (`malloc`, `free`)
-- Sujet officiel 42
+- Documentation on file descriptors
+- Documentation on static variables in C
+- Dynamic memory management (`malloc`, `free`)
+- Official 42 subject
 
 ---
 
 ## AI usage
 
-L'IA a été utilisée uniquement pour :
-- clarifier certains points du sujet
-- structurer ce README
+AI was used only to:
+- clarify some points of the subject
+- structure this README
 
-L'implémentation, la logique et la compréhension du code ont été réalisées manuellement.
+The implementation, the logic and the understanding of the code were done manually.
 
 ---
 
-## Auteur
+## Author
 
 42 Lausanne
-Login : isoulima
+Login: isoulima
